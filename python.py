@@ -1,15 +1,39 @@
+'''
+
+DEVICE CONTROL MONITOR (DCM)
+SFWRENG 3K04 
+
+'''
+
+# TODO: make a input checker function 
+
+
+# Importing Libraries 
+from tkinter import Event
 import PySimpleGUI as sg
 
+# Setting Up Global Variables 
+userCreds = [] # 2D list used for storing all registered usernames and corresponding passowords. 
 
-username = ''
-password = ''
 
-userCreds = []
+def dashboard():
+    sg.theme("LightBrown")
+    layout = [[sg.Text("Dashboard", size =(15, 1), font=40)],
+            [sg.Button('Quit')]]
 
+    window = sg.Window("Dashboard", layout)
+
+    while True:
+        event,values = window.read()
+        if event == "Quit" or event == sg.WIN_CLOSED:
+            break
+                
+
+    window.close()
 
 
 def progress_bar():
-    sg.theme('LightBlue2')
+    sg.theme('LightBrown')
     layout = [[sg.Text('Creating your account...')],
             [sg.ProgressBar(1000, orientation='h', size=(20, 20), key='progbar')],
             [sg.Cancel()]]
@@ -24,8 +48,7 @@ def progress_bar():
 
 
 def create_account():
-    global username, password
-    sg.theme('LightBlue2')
+    sg.theme('LightBrown')
     layout = [[sg.Text("Sign Up", size =(15, 1), font=40, justification='c')],
              [sg.Text("Create Username", size =(15, 1), font=16), sg.InputText(key='-username-', font=16)],
              [sg.Text("Create Password", size =(15, 1), font=16), sg.InputText(key='-password-', font=16, password_char='*')],
@@ -62,24 +85,24 @@ def create_account():
 
 
 def login():
-    global username,password
-    sg.theme("LightBlue2")
+    sg.theme("LightBrown")
     layout = [[sg.Text("Log In", size =(15, 1), font=40)],
             [sg.Text("Username", size =(15, 1), font=16),sg.InputText(key='-usrnm-', font=16)],
             [sg.Text("Password", size =(15, 1), font=16),sg.InputText(key='-pwd-', password_char='*', font=16)],
-            [sg.Button('Ok'),sg.Button('Cancel'), sg.Button('Register')]]
+            [sg.Button('Login'),sg.Button('Quit'), sg.Button('Register')]]
 
     window = sg.Window("Log In", layout)
 
     while True:
         event,values = window.read()
-        if event == "Cancel" or event == sg.WIN_CLOSED:
+        if event == "Quit" or event == sg.WIN_CLOSED:
             break
         else:
-            if event == "Ok":
+            if event == "Login":
                 
                 if (checkCreds(values['-usrnm-'], values['-pwd-'])):
-                    sg.popup("Welcome!")
+                    window.close()
+                    dashboard()
                 else:
                     sg.popup("Invalid login. Try again")
                 
@@ -89,6 +112,31 @@ def login():
                 
 
     window.close()
+
+def welcome():
+    sg.theme("LightBrown")
+    layout = [[sg.Image("heart.png")], 
+                [sg.Text("Welcome to the DCM", size=(20), font=40)], 
+                [sg.Button('Login')], 
+                [sg.Button('Register')], 
+                [sg.Button('Quit')]]
+
+    window = sg.Window("Welcome", layout, element_justification='c', text_justification='c')
+
+    while True:
+        event, values = window.read()
+        if event == "Quit" or event == sg.WIN_CLOSED:
+            break
+        else:
+            if event == 'Login':
+                window.close()
+                login()
+            if event == 'Register':
+                window.close()
+                create_account()
+    window.close()
+
+
 
 
 def checkCreds(name, passwor):
@@ -106,7 +154,4 @@ def checkCreds(name, passwor):
     return 0
 
 
-# TODO: make a input checker function 
-
-login()
-
+welcome()

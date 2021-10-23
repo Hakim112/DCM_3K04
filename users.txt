@@ -1,9 +1,3 @@
-user1 goodPass
-user2 goodPas
-1 2
-1 3
-4 4
-sd sd
-fdg fdg
-fuckface pass
-yee yee
+1 1
+2 2
+3 3
