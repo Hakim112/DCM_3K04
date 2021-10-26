@@ -5,8 +5,6 @@ SFWRENG 3K04
 
 '''
 
-# TODO: make a input checker function 
-
 
 # Importing Libraries 
 from textwrap import fill
@@ -19,7 +17,8 @@ userCreds = [] # 2D list used for storing all registered usernames and correspon
 device = "0101"
 comm = 1
 pacingMode = "AOO"
-parameters = [696, 420, 7979]
+parameters = [696, 420, 7979, 45, 765, 23, 87, 99]
+
 
 def editParam():
     sg.theme('LightBrown')
@@ -27,13 +26,18 @@ def editParam():
             [sg.Text("Lower Rate Limit"), sg.InputText(key='-P0-', size=15)],
             [sg.Text("Upper Rate Limit"), sg.InputText(key='-P1-', size=15)],
             [sg.Text("Atrial Amplitude"), sg.InputText(key='-P2-', size=15)],
+            [sg.Text("Atrial Pulse Width"), sg.InputText(key='-P3-', size=15)],
+            [sg.Text("Ventricular Amplitude"), sg.InputText(key='-P4-', size=15)],
+            [sg.Text("Ventricular Pulse Width"), sg.InputText(key='-P5-', size=15)],
+            [sg.Text("VRP"), sg.InputText(key='-P6-', size=15)],
+            [sg.Text("ARP"), sg.InputText(key='-P7-', size=15)],
             [sg.Button("Submit")],
-            [sg.Button('Quit')]]
+            [sg.Button('Cancel')]]
     
     window = sg.Window('Edit Parameters', layout)
     while True:
         event, values = window.read()
-        if event == 'Quit' or event == sg.WIN_CLOSED:
+        if event == 'Cancel' or event == sg.WIN_CLOSED:
             window.close()
             dashboard()
             break
@@ -68,6 +72,11 @@ def dashboard():
                 [sg.Text("Lower Rate Limit: " + str(parameters[0]))], 
                 [sg.Text("Upper Rate Limit: " + str(parameters[1]))],
                 [sg.Text("Atrial Amplitude: " + str(parameters[2]))],
+                [sg.Text("Atrial Pulse Width: " + str(parameters[3]))],
+                [sg.Text("Ventricular Amplitude: " + str(parameters[4]))],
+                [sg.Text("Ventricular Pulse Width: " + str(parameters[5]))],
+                [sg.Text("VRP: " + str(parameters[6]))],
+                [sg.Text("ARP: " + str(parameters[7]))],
             ])], 
             [sg.Button('Edit Paramaters')],
             [sg.Button('Quit')]]
