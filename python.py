@@ -12,12 +12,31 @@ from tkinter import Event
 import PySimpleGUI as sg
 import random
 
+def readParam():
+    outList = []
+
+    file1 = open("parameters.txt", "r")
+    for line in file1.readlines():
+        outList.append(line.strip("\n"))
+    file1.close
+
+    return outList
+
+def writeParam(inList):
+    file1 = open("parameters.txt", "w")
+
+    for line in inList:
+        file1.write(str(line) + "\n")
+
+    file1.close()
+
 # Setting Up Global Variables 
 userCreds = [] # 2D list used for storing all registered usernames and corresponding passowords. 
 device = "0101"
 comm = 1
 pacingMode = "AOO"
-parameters = [696, 420, 7979, 45, 765, 23, 87, 99]
+parameters = readParam()
+
 
 
 def editParam():
@@ -46,6 +65,9 @@ def editParam():
                 keyString = "-P" + str(i) + "-"
                 if (values[keyString] != ""):
                     parameters[i] = values[keyString]
+            
+            writeParam(parameters)
+
             window.close()
             dashboard()
             break
@@ -63,6 +85,9 @@ def updateIndicator(window, key, color):
 
 def dashboard():
     sg.theme("LightBrown")
+
+    parameters = readParam()
+
     layout = [[sg.Text("PACEMAKER Device: " + device)],
             [sg.Text("Device Communication"), commIndicator('-Main-')],
             [sg.Frame("Pacing Mode", [
