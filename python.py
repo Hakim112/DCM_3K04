@@ -5,10 +5,13 @@ SFWRENG 3K04
 
 '''
 
+# input validation 
+# param limits
 
 # Importing Libraries 
 from textwrap import fill
 from tkinter import Event
+from tkinter.constants import FALSE
 import PySimpleGUI as sg
 import random
 
@@ -34,9 +37,9 @@ def writeParam(inList):
 userCreds = [] # 2D list used for storing all registered usernames and corresponding passowords. 
 device = "0101"
 comm = 1
-pacingMode = "AOO"
+pacingModes = ["AOO", "VOO", "AAI", "VVI"]
 parameters = readParam()
-
+paramLimits = [(30, 175), (50, 175), (3.5, 7.0), (0.1, 1.9), (3.5, 7.0), (0.1, 1.9), (150, 500), (150, 500)]
 
 
 def editParam():
@@ -61,16 +64,32 @@ def editParam():
             dashboard()
             break
         if event == 'Submit':
+            
+            # Checking if values are in range 
+            errIn = False
             for i in range(0, len(parameters)):
                 keyString = "-P" + str(i) + "-"
                 if (values[keyString] != ""):
-                    parameters[i] = values[keyString]
-            
-            writeParam(parameters)
+                    if (paramLimits[i][0] > int(values[keyString]) or int(values[keyString]) > paramLimits[i][1]):
+                        errIn = True
+                        break
 
-            window.close()
-            dashboard()
-            break
+            if errIn==True:
+                sg.popup("Error: Check inputs.")
+            else: 
+                for i in range(0, len(parameters)):
+                    keyString = "-P" + str(i) + "-"
+                    if (values[keyString] != ""):
+                        parameters[i] = values[keyString]
+            
+                writeParam(parameters)
+
+                window.close()
+                dashboard()
+                break
+        
+
+
     window.close()
 
 
@@ -84,6 +103,7 @@ def updateIndicator(window, key, color):
     graph.draw_circle((0, 0), 12, fill_color=color, line_color=color)
 
 def dashboard():
+    i = 0
     sg.theme("LightBrown")
 
     parameters = readParam()
@@ -91,7 +111,7 @@ def dashboard():
     layout = [[sg.Text("PACEMAKER Device: " + device)],
             [sg.Text("Device Communication"), commIndicator('-Main-')],
             [sg.Frame("Pacing Mode", [
-                [sg.Text(pacingMode, font=40)]
+                [sg.Text(pacingModes[0], font=40, key='-MODE-')]
             ])], 
             [sg.Frame("Parameters", [
                 [sg.Text("Lower Rate Limit: " + str(parameters[0]))], 
@@ -118,7 +138,14 @@ def dashboard():
             editParam()
             break
     
-        updateIndicator(window, '-Main-', 'red' if comm==0 else 'green')
+        updateIndicator(window, '-Main-', 'red' if comm==0 else 'green')    
+
+        if (i == 3):
+            i = 0
+        else: 
+            i +=1
+
+        window["-MODE-"].update(pacingModes[i])
 
     window.close()
 
@@ -156,7 +183,9 @@ def create_account():
                 
                 file1 = open("users.txt", "a")
                 
-                if (len(userCreds) < 10) & (checkCreds(values['-username-'], values['-password-']) == 0):
+                if (" " in values['-username-']) | (" " in values['-password-']) | (values['-password-'] == "") | (values['-username-'] == ""):
+                    sg.popup("Invalid input.")
+                elif (len(userCreds) < 10) & (checkCreds(values['-username-'], values['-password-']) == 0):
                     file1.write("\n" + values['-username-'] + " " + values['-password-'])
                     file1.close()
 
@@ -189,7 +218,9 @@ def login():
         else:
             if event == "Login":
                 
-                if (checkCreds(values['-usrnm-'], values['-pwd-'])):
+                if (" " in values['-usrnm-']) | (" " in values['-pwd-']) | (values['-pwd-'] == "") | (values['-usrnm-'] == ""):
+                    sg.popup("Invalid input.")
+                elif (checkCreds(values['-usrnm-'], values['-pwd-'])):
                     window.close()
                     dashboard()
                 else:
