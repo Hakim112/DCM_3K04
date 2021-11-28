@@ -9,6 +9,107 @@ SFWRENG 3K04
 # Importing Libraries 
 import PySimpleGUI as sg  
 
+
+import serial 
+import struct
+
+# HOW DOES THIS WORK WITH struct.pack ?
+
+# Establish Serial Connection 
+ser = serial.Serial()
+ser.port = "COM5"
+ser.baudrate = 115200
+
+
+def sendParam(parmsList):
+    
+    packets = []
+    packets.append(struct.pack('<B', 22)) # Init
+    packets.append(struct.pack('<B', 85)) # set-param code
+    packets.append(struct.pack('<B', 0))
+    packets.append(struct.pack('<H', 0))
+    packets.append(struct.pack('<H', 0))
+    packets.append(struct.pack('<B', 0))
+    packets.append(struct.pack('<H', 0))
+    packets.append(struct.pack('<d', 0))
+    packets.append(struct.pack('<d', 0))
+    packets.append(struct.pack('<f', 0))
+    packets.append(struct.pack('<f', 0))
+    packets.append(struct.pack('<H', 0))
+    packets.append(struct.pack('<H', 0))
+    packets.append(struct.pack('<f', 0))
+    packets.append(struct.pack('<B', 0))
+    packets.append(struct.pack('<B', 0))
+    
+    ser.open()
+    for packet in packets:
+        ser.write(packet)
+    ser.close()
+
+
+
+
+'''
+
+
+-input validation
+-send using struct.pack
+-receive data
+    
+
+2 ways of setting this up:
+    1. Make/generate a list of acceptable values and keep as a global variable. Check if input is in list.
+    2. Collection of if statements for each parameter to check for fail-conditions. 
+    
+'''
+
+
+
+def validate(inputList):
+
+    # This function takes in all the inputted parameters (which are strings) and returns 1 iff all paramaters are valid. 
+    
+
+    for i in range(0, inputList.length):
+        if (inputList[i] != ""):
+
+            # Parameter 0 : Lower Rate Limit 
+            if (i == 0):
+                num = int(inputList[i])
+                if (30 <= num <= 50) or (90 <= num <= 175):
+                    if (num % 5 != 0):
+                        return 0
+                if (num > 175 or num < 30):
+                    return 0
+            
+            # Parameter 1 : Upper Rate Limit 
+            if (i == 1):
+                num = int(inputList[i])
+                if (num > 175 or num < 50):
+                    return 0
+                elif (num % 5 != 0):
+                    return 0
+
+            # Parameter 2 : Maximum Sensor Rate 
+            if (i == 2):
+                num = int(inputList[i])
+                if (num > 175 or num < 50):
+                    return 0
+                elif (num % 5 != 0):
+                    return 0
+
+            # Parameter 3 : Fixed AV Delay
+            if (i == 3):
+                num = int(inputList[i])
+
+    return 1
+
+                
+
+
+    
+
+
 # Defining Functions
 def readParam():
     # Used to read the parameters stored in the text file
@@ -59,7 +160,7 @@ def editParam():
     sg.theme('LightBrown')
     
     layout = [[sg.Text('Leave blank for no change.')],
-            [sg.Text("Lower Rate Limit"), sg.InputText(key='-P0-', size=15)],
+            [sg.Text("Lower Rate Limit"), sg.Spin(values = (1, 10), initial_value=5, key='-P0-', size=15)],
             [sg.Text("Upper Rate Limit"), sg.InputText(key='-P1-', size=15)],
             [sg.Text("Atrial Amplitude"), sg.InputText(key='-P2-', size=15)],
             [sg.Text("Atrial Pulse Width"), sg.InputText(key='-P3-', size=15)],
@@ -71,7 +172,7 @@ def editParam():
             [sg.Button('Cancel')]]
     
     window = sg.Window('Edit Parameters', layout)
-    
+ 
     while True:
         event, values = window.read()
         if event == 'Cancel' or event == sg.WIN_CLOSED:
@@ -80,6 +181,14 @@ def editParam():
             break
         if event == 'Submit':
             
+            # Form List of input values
+            paramInput = []
+            for i in range(0, len(parameters)):
+                keyString = "-P" + str(i) + "-"
+                paramInput.append(values[keyString])
+            
+            
+
             # Checking if values are in range 
             errIn = False
             for i in range(0, len(parameters)):
@@ -99,6 +208,7 @@ def editParam():
                         parameters[i] = values[keyString]
             
                 writeParam(parameters)
+                sendParam(parameters)
 
                 window.close()
                 dashboard()
