@@ -4,9 +4,9 @@ DEVICE CONTROL MONITOR (DCM)
 SFWRENG 3K04 
 
 TODO
-- Modularize code
+- Pacing Mode 
+- CommIndicator
 - Input Validation 
-- Testing
 
 '''
 
