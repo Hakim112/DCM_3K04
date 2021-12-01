@@ -7,6 +7,7 @@ TODO
 - Pacing Mode 
 - CommIndicator
 - Input Validation 
+- Add new parameters 
 
 '''
 

@@ -204,8 +204,10 @@ def editParam():
     sg.theme('DarkTeal11')
     
     paramList = parameters.readParam()
+    modeSelection = ["Off", "DDD", "VDD", "DDI", "DOO", "AOO", "AAI", "VOO", "VVI", "AAT", "VVT", "DDDR", "VDDR", "DDIR", "DOOR", "AOOR", "AAIR", "VOOR", "VVIR"]
 
     layout = [[sg.Text('Leave blank for no change.')],
+            [sg.Combo(modeSelection, key='-P0-')],
             [sg.Text("Lower Rate Limit"), sg.InputText(key='-P0-', size=15)],
             [sg.Text("Upper Rate Limit"), sg.InputText(key='-P1-', size=15)],
             [sg.Text("Atrial Amplitude"), sg.InputText(key='-P2-', size=15)],

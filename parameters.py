@@ -41,41 +41,52 @@ def readParam():
 
 
 def validate(inputList):
-    # Takes in all the inputted parameters (which are strings) and returns 1 iff all paramaters are valid.
+    # Takes in all the inputted parameters (which are strings) and returns a string of 1s iff all paramaters are valid.
 
-    # for i in range(0, len(inputList)):
-    #     if (inputList[i] != ""):
-# 
-    #         # Parameter 0 : Lower Rate Limit 
-    #         if (i == 0):
-    #             num = int(inputList[i])
-    #             if (30 <= num <= 50) or (90 <= num <= 175):
-    #                 if (num % 5 != 0):
-    #                     return 0
-    #             if (num > 175 or num < 30):
-    #                 return 0
-    #         
-    #         # Parameter 1 : Upper Rate Limit 
-    #         if (i == 1):
-    #             num = int(inputList[i])
-    #             if (num > 175 or num < 50):
-    #                 return 0
-    #             elif (num % 5 != 0):
-    #                 return 0
-# 
-    #         # Parameter 2 : Maximum Sensor Rate 
-    #         if (i == 2):
-    #             num = int(inputList[i])
-    #             if (num > 175 or num < 50):
-    #                 return 0
-    #             elif (num % 5 != 0):
-    #                 return 0
-# 
-    #         # Parameter 3 : Fixed AV Delay
-    #         if (i == 3):
-    #             num = int(inputList[i])
-# 
+    valids = ""
+
+    # Parameter 0 : Mode 
+
+
+
+    # Parameter 1 : Lower Rate Limit 
+
+    # Parameter 2 : Upper Rate Limit 
+
+    # Parameter 3 : Fixed AV Delay
+
+    # Parameter 4 : Reaction Time
+
+    # Parameter 5 : Response Factor
+
+    # Parameter 6 : Activity Threshold
+
+    # Parameter 7 : Recovery Time
+
+    # Parameter 8 : Maximum Sensor Rate 
+
+    # Parameter 9 : Atrial Amplitude 
+
+    # Parameter 10 : Atrial Pulse Width 
+
+    # Parameter 11 : ARP 
+
+    # Parameter 12 : Atrial Threshold 
+    
+    # Parameter 13 : Atrial Sensitivity 
+
+    # Parameter 14 : Ventricular Amplitude 
+
+    # Parameter 15 : Ventricular Pulse Width 
+
+    # Parameter 16 : VRP 
+
+    # Parameter 17 : Ventricular Threshold 
+    
+    # Parameter 18 : Ventricular Sensitivity 
+    
     return 1
+
 
 
 
