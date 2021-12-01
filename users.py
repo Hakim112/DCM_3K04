@@ -4,7 +4,7 @@ users.py
 This module holds all fucntions and logic related to users. 
 
 '''
-import os
+
 
 
 def validCreds(user, pswr):

@@ -6,14 +6,21 @@ This module holds all fucntions and logic related to parameters.
 
 '''
 
+from os import read
+
+
 def writeParam(inList):
     # Writes parameters to local storage file. 
 
+    currentParams = readParam()
 
     file1 = open("parameters.txt", "w")
 
-    for line in inList:
-        file1.write(str(line) + "\n")
+    for i in range(len(inList)):
+        if (inList[i] == ""):
+            file1.write(str(currentParams[i]) + "\n")
+        else:
+            file1.write(str(inList[i]) + "\n")
 
     file1.close()
 
@@ -36,38 +43,38 @@ def readParam():
 def validate(inputList):
     # Takes in all the inputted parameters (which are strings) and returns 1 iff all paramaters are valid.
 
-    for i in range(0, inputList.length):
-        if (inputList[i] != ""):
-
-            # Parameter 0 : Lower Rate Limit 
-            if (i == 0):
-                num = int(inputList[i])
-                if (30 <= num <= 50) or (90 <= num <= 175):
-                    if (num % 5 != 0):
-                        return 0
-                if (num > 175 or num < 30):
-                    return 0
-            
-            # Parameter 1 : Upper Rate Limit 
-            if (i == 1):
-                num = int(inputList[i])
-                if (num > 175 or num < 50):
-                    return 0
-                elif (num % 5 != 0):
-                    return 0
-
-            # Parameter 2 : Maximum Sensor Rate 
-            if (i == 2):
-                num = int(inputList[i])
-                if (num > 175 or num < 50):
-                    return 0
-                elif (num % 5 != 0):
-                    return 0
-
-            # Parameter 3 : Fixed AV Delay
-            if (i == 3):
-                num = int(inputList[i])
-
+    # for i in range(0, len(inputList)):
+    #     if (inputList[i] != ""):
+# 
+    #         # Parameter 0 : Lower Rate Limit 
+    #         if (i == 0):
+    #             num = int(inputList[i])
+    #             if (30 <= num <= 50) or (90 <= num <= 175):
+    #                 if (num % 5 != 0):
+    #                     return 0
+    #             if (num > 175 or num < 30):
+    #                 return 0
+    #         
+    #         # Parameter 1 : Upper Rate Limit 
+    #         if (i == 1):
+    #             num = int(inputList[i])
+    #             if (num > 175 or num < 50):
+    #                 return 0
+    #             elif (num % 5 != 0):
+    #                 return 0
+# 
+    #         # Parameter 2 : Maximum Sensor Rate 
+    #         if (i == 2):
+    #             num = int(inputList[i])
+    #             if (num > 175 or num < 50):
+    #                 return 0
+    #             elif (num % 5 != 0):
+    #                 return 0
+# 
+    #         # Parameter 3 : Fixed AV Delay
+    #         if (i == 3):
+    #             num = int(inputList[i])
+# 
     return 1
 
 

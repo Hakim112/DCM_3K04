@@ -13,6 +13,58 @@ pacingModes = ["AOO", "VOO", "AAI", "VVI"] # List that stores all the pacing mod
 paramLimits = [(30, 175), (50, 175), (3.5, 7.0), (0.1, 1.9), (3.5, 7.0), (0.1, 1.9), (150, 500), (150, 500)] # List used to store all the bounds for each parameter 
 
 
+# Dashboard Window
+def dashboard():
+    
+    sg.theme("DarkTeal11")
+
+    paramList = parameters.readParam()
+    device = "107380"
+    
+    layout = [[sg.Text("PACEMAKER Device: " + device)],
+            [sg.Text("Device Communication"), commIndicator('-Main-')],
+            [sg.Frame("Pacing Mode", [
+                [sg.Text(pacingModes[0], font=40, key='-MODE-')]
+            ])], 
+            [sg.Frame("Parameters", [
+                [sg.Text("Lower Rate Limit: " + str(paramList[0]))], 
+                [sg.Text("Upper Rate Limit: " + str(paramList[1]))],
+                [sg.Text("Atrial Amplitude: " + str(paramList[2]))],
+                [sg.Text("Atrial Pulse Width: " + str(paramList[3]))],
+                [sg.Text("Ventricular Amplitude: " + str(paramList[4]))],
+                [sg.Text("Ventricular Pulse Width: " + str(paramList[5]))],
+                [sg.Text("VRP: " + str(paramList[6]))],
+                [sg.Text("ARP: " + str(paramList[7]))],
+            ])], 
+            [sg.Button('Edit Paramaters')],
+            [sg.Button('Quit')]]
+
+    window = sg.Window("Dashboard", layout)
+    
+    i = 0  # used for cycling through the pacing modes for demonstration 
+    while True:
+        event,values = window.read(timeout=400)
+        
+        if event == "Quit" or event == sg.WIN_CLOSED:
+            break
+        if event == "Edit Paramaters":
+            window.close()
+            editParam()
+            break
+    
+        updateIndicator(window, '-Main-', 'red' if comm==0 else 'green') # On each loop the circle is updated
+
+        # Cycling through pacing modes [FOR DEMO]
+        if (i == 3):
+            i = 0
+        else: 
+            i +=1
+        window["-MODE-"].update(pacingModes[i])
+
+    window.close()
+
+
+
 
 # Window for editing parameters
 def editParam():

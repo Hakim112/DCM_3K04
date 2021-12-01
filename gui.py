@@ -7,7 +7,8 @@ Each function represents a state/window.
 '''
 
 # Importing libraries
-import PySimpleGUI as sg  
+import PySimpleGUI as sg
+from python import commIndicator  
 import users
 import parameters
 
@@ -133,16 +134,30 @@ def create_account():
 
 
 
+def commIndicator(key, radius=30):
+    # Used to setup the graph for showing the communication indicator
+    return sg.Graph(canvas_size=(radius, radius), graph_bottom_left=(-radius, -radius), 
+    graph_top_right=(radius, radius), pad=(0, 0), key=key)
 
+def updateIndicator(window, key, color):
+    # Used to update the communication indicator
+    graph = window[key]
+    graph.erase()
+    graph.draw_circle((0, 0), 12, fill_color=color, line_color=color)
 
 # Dashboard Window
 def dashboard():
     
+    # Setting Theme
     sg.theme("DarkTeal11")
 
+    # Updating variables
     paramList = parameters.readParam()
+    pacingModes = ["ASS"]
     device = "107380"
+    comm = 0
 
+    # Defining layout
     layout = [[sg.Text("PACEMAKER Device: " + device)],
             [sg.Text("Device Communication"), commIndicator('-Main-')],
             [sg.Frame("Pacing Mode", [
@@ -161,9 +176,9 @@ def dashboard():
             [sg.Button('Edit Paramaters')],
             [sg.Button('Quit')]]
 
-    window = sg.Window("Dashboard", layout)
+    window = sg.Window("Dashboard", layout, font=font)
     
-    i = 0  # used for cycling through the pacing modes for demonstration 
+    # i = 0  # used for cycling through the pacing modes for demonstration 
     while True:
         event,values = window.read(timeout=400)
         
@@ -176,12 +191,58 @@ def dashboard():
     
         updateIndicator(window, '-Main-', 'red' if comm==0 else 'green') # On each loop the circle is updated
 
-        # Cycling through pacing modes [FOR DEMO]
-        if (i == 3):
-            i = 0
-        else: 
-            i +=1
-        window["-MODE-"].update(pacingModes[i])
+    window.close()
+
+
+
+
+
+
+# Window for editing parameters
+def editParam():
+    
+    sg.theme('DarkTeal11')
+    
+    paramList = parameters.readParam()
+
+    layout = [[sg.Text('Leave blank for no change.')],
+            [sg.Text("Lower Rate Limit"), sg.InputText(key='-P0-', size=15)],
+            [sg.Text("Upper Rate Limit"), sg.InputText(key='-P1-', size=15)],
+            [sg.Text("Atrial Amplitude"), sg.InputText(key='-P2-', size=15)],
+            [sg.Text("Atrial Pulse Width"), sg.InputText(key='-P3-', size=15)],
+            [sg.Text("Ventricular Amplitude"), sg.InputText(key='-P4-', size=15)],
+            [sg.Text("Ventricular Pulse Width"), sg.InputText(key='-P5-', size=15)],
+            [sg.Text("VRP"), sg.InputText(key='-P6-', size=15)],
+            [sg.Text("ARP"), sg.InputText(key='-P7-', size=15)],
+            [sg.Button("Submit")],
+            [sg.Button('Cancel')]]
+    
+    window = sg.Window('Edit Parameters', layout, font=font)
+ 
+    while True:
+        event, values = window.read()
+        if event == 'Cancel' or event == sg.WIN_CLOSED:
+            window.close()
+            dashboard()
+            break
+        if event == 'Submit':
+            
+            # Form List of input values
+            paramInput = []
+            for i in range(0, len(paramList)):
+                keyString = "-P" + str(i) + "-"
+                paramInput.append(values[keyString])
+            print(paramInput)
+            
+            # Input valid
+            if (parameters.validate(paramInput) == 1):
+                parameters.writeParam(paramInput)
+                window.close()
+                dashboard()
+                break
+            else:
+                sg.popup("Invalid Input")
+
 
     window.close()
 
