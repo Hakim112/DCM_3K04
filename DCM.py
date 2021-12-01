@@ -16,14 +16,7 @@ import serial
 import struct
 
 # Importing Modules 
-import parameters
-import users
 import gui
 
 
-# gui.welcome()
-
-import os
-cwd = os.getcwd()
-print(cwd)
-print(os.listdir(cwd))
+gui.welcome()

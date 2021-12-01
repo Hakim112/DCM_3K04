@@ -6,7 +6,6 @@ This module holds all fucntions and logic related to parameters.
 
 '''
 
-
 def writeParam(inList):
     # Writes parameters to local storage file. 
 
