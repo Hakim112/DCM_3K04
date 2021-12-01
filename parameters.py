@@ -6,8 +6,6 @@ This module holds all fucntions and logic related to parameters.
 
 '''
 
-from os import read
-
 
 def writeParam(inList):
     # Writes parameters to local storage file. 
@@ -122,9 +120,7 @@ def validate(inputList):
                 else:
                     valids += "0"
 
-
-
-            # Parameter 9 : Atrial Amplitude     ASSUMING UNREG
+            # Parameter 9 : Atrial Amplitude   
             elif i == 9:
                 valids += "1"
 
@@ -135,14 +131,6 @@ def validate(inputList):
                     valids += "1"
                 else:
                     valids += "0"
-
-                # val = float(value)
-                # if (val == 0.05):
-                #     valids += "1"
-                # elif (0.1 <= val <= 1.9) & (val % 0.1 == 0):
-                #     valids += "1"
-                # else:
-                #     valids += "0"
             
             # Parameter 11 : ARP 
             elif i == 11:
@@ -152,54 +140,36 @@ def validate(inputList):
                 else:
                     valids += "0"
 
-                # val = float(value)
-                # if (val == 0):
-                #     valids += "1"
-                # elif (0.5 <= val <= 3.2) & (val % 0.1 == 0):
-                #     valids += "1"
-                # elif (3.5 <= val <= 7.0) & (val % 0.5 == 0):
-                #     valids += "1"
-                # else:
-                #     valids += "0"
-
-            # Parameter 12 : Atrial Threshold   IS THIS NEEDED??
+            # Parameter 12 : Atrial Sensitivity 
             elif i == 12:
-                valids += "1"
-
-            # Parameter 13 : Atrial Sensitivity 
-            elif i == 13:
                 val = float(value)
                 if (0 <= val <= 5) & (val % 0.1 == 0):
                     valids += "1"
                 else:
                     valids += "0"
 
-            # Parameter 14 : Ventricular Amplitude 
-            elif i == 14:     # NEED CLEARIFICATION: REG OR UNREG?
+            # Parameter 13 : Ventricular Amplitude 
+            elif i == 13: 
                 valids += "1"
             
-            # Parameter 15 : Ventricular Pulse Width
-            elif i == 15:
+            # Parameter 14 : Ventricular Pulse Width
+            elif i == 14:
                 val = int(value)
                 if (1 <= val <= 30) & (val % 1 == 0):
                     valids += "1"
                 else:
                     valids += "0"
             
-            # Parameter 16 : VRP
-            elif i == 16:
+            # Parameter 15 : VRP
+            elif i == 15:
                 val = int(value)
                 if (150 <= val <= 500) & (val % 10 == 0):
                     valids += "1"
                 else:
                     valids += "0"
             
-            # Parameter 17 : Ventricular Threshold  IS THIS NEEDED??
-            elif i == 17: 
-                valids += "1"
-            
-            # Parameter 18 : Ventricular Sensitivity 
-            elif i == 18:
+            # Parameter 16 : Ventricular Sensitivity 
+            elif i == 16:
                 val = float(value)
                 if (0 <= val <= 5) & (val % 0.1 == 0):
                     valids += "1"
@@ -229,26 +199,41 @@ def sendParam(parmsList):
     packet = [] # Holds all data for each transmission
     packet.append(b'\x16') # Init
     packet.append(b'\x55') # set-param code
-    packet.append(struct.pack('<H', 10))
-    packet.append(struct.pack('<H', 60))
-    packet.append(struct.pack('<H', 120))
-    packet.append(struct.pack('<H', 250))
-    packet.append(struct.pack('<H', 150))
-    packet.append(struct.pack('<H', 10))
-    packet.append(struct.pack('<H', 16))
-    packet.append(struct.pack('<d', 0.2))#act-thresh
-    packet.append(struct.pack('<H', 20))
-    packet.append(struct.pack('<H', 180))
-    packet.append(struct.pack('<d', 3.5))
-    packet.append(struct.pack('<H', 10))
-    packet.append(struct.pack('<H', 200))#ARP
-    packet.append(struct.pack('<d', 1.8))
-    packet.append(struct.pack('<d', 2.4))
-    packet.append(struct.pack('<d', 3.5))
-    packet.append(struct.pack('<H', 10))
-    packet.append(struct.pack('<H', 200))
-    packet.append(struct.pack('<d', 2.2))
-    packet.append(struct.pack('<d', 2.4)) 
+    packet.append(struct.pack('<B', int(parmsList[0])))  # Mode
+    packet.append(struct.pack('<B', int(parmsList[1])))  # LRR 
+    packet.append(struct.pack('<B', int(parmsList[2])))  # URR
+    packet.append(struct.pack('<H', int(parmsList[3])))  # Fixed AV Delay
+    packet.append(struct.pack('<B', int(parmsList[4])))  # Reaction time
+    packet.append(struct.pack('<B', int(parmsList[5])))  # Response Factor 
+
+    # Act Thresh
+    if (parmsList[6] == "V-Low"):
+        packet.append(struct.pack('<d', 0.0)) 
+    elif (parmsList[6] == "Low"):
+        packet.append(struct.pack('<d', 0.0)) 
+    elif (parmsList[6] == "Med-Low"):
+        packet.append(struct.pack('<d', 0.1)) 
+    elif (parmsList[6] == "Med"): # nom
+        packet.append(struct.pack('<d', 0.2)) 
+    elif (parmsList[6] == "Med-High"):
+        packet.append(struct.pack('<d', 0.3)) 
+    elif (parmsList[6] == "High"):
+        packet.append(struct.pack('<d', 0.4)) 
+    elif (parmsList[6] == "V-High"):
+        packet.append(struct.pack('<d', 0.5)) 
+
+    packet.append(struct.pack('<B', int(parmsList[7])))    # Recovery Time
+    packet.append(struct.pack('<B', int(parmsList[8])))    # Max Sensor Rate
+    packet.append(struct.pack('<d', float(parmsList[9])))  # Atrial Amp
+    packet.append(struct.pack('<B', int(parmsList[10])))   # Atrial Pulse Width
+    packet.append(struct.pack('<H', int(parmsList[11])))   # ARP
+    packet.append(struct.pack('<d', 1.8))                  # ATRIAL THRESHOLD
+    packet.append(struct.pack('<d', float(parmsList[12]))) # Atrial Sens
+    packet.append(struct.pack('<d', float(parmsList[13]))) # Vent Amp
+    packet.append(struct.pack('<B', int(parmsList[14])))   # Vent Pulse Width
+    packet.append(struct.pack('<H', int(parmsList[15])))   # VRP
+    packet.append(struct.pack('<d', 1.8))                  # VENTRICULAR THRESHOLD
+    packet.append(struct.pack('<d', float(parmsList[16]))) # Vent sens
     
     # Sending Data
     ser.open()
@@ -275,8 +260,8 @@ def validateSend(sentList):
 def receiveParam():
 
     # NEED SIMULINK PEOPLE TO COME THROUGH 
-    # listR = readParam()
-    listR = ['DDD', '61', '120', '150', '30', '8', 'Med', '5', '120', '3.75', '1', '250', '!', '2.5', '3.75', '1', '320', '!', '2.5']
+    listR = readParam()
+    # listR = ['DDD', '61', '120', '150', '30', '8', 'Med', '5', '120', '3.75', '1', '250', '!', '2.5', '3.75', '1', '320', '!', '2.5']
     print(listR)
 
 

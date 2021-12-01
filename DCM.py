@@ -11,5 +11,5 @@ TODO
 # Importing Modules 
 import gui
 
-gui.welcome()
-# gui.dashboard()
+# gui.welcome()
+gui.dashboard()

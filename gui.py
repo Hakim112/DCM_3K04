@@ -22,11 +22,11 @@ def welcome():
     sg.theme("Darkteal11")
 
     # Defining Layout
-    layout = [[sg.Image("heart3.png")],[sg.Text("WELCOME TO THE DCM", size=(20), font=("Courier New", 12))], 
+    layout = [[sg.Image("heart3.png")],[sg.Text("WELCOME TO THE DCM", size=(20), font=("Courier New", 14))], 
                 [sg.Button('Login')], 
                 [sg.Button('Register')], 
                 [sg.Button('Quit')],
-                [sg.Text("Device Control Monitor v2.0", size=(30,1), font=font)]]
+                [sg.Text("Device Control Monitor v2.0", size=(30,1), font=("Courier New", 9))]]
 
     # Defining Window
     window = sg.Window("Welcome", layout, element_justification='c', text_justification='c', font=font)
@@ -57,7 +57,7 @@ def login():
     sg.theme("DarkTeal11")
 
     # Defining layout 
-    layout = [[sg.Text("Log In", size =(10, 1))],
+    layout = [[sg.Text("LOG IN", font=("Courier New", 16), size =(10, 1))],
             [sg.Text("Username", size =(10, 1)), sg.InputText(key='-usrnm-',  size=15)],
             [sg.Text("Password", size =(10, 1)), sg.InputText(key='-pwd-', password_char='*',  size=15)],
             [sg.Button('Login'),sg.Button('Register'), sg.Button('Quit')]]
@@ -96,7 +96,7 @@ def create_account():
     sg.theme('DarkTeal11')
     
     # Forming layout
-    layout = [[sg.Text("Sign Up", size =(15, 1), justification='c')],
+    layout = [[sg.Text("REGISTER", font=("Courier New", 16), size =(15, 1))],
              [sg.Text("Create Username", size =(15, 1)), sg.InputText(key='-username-', size=15)],
              [sg.Text("Create Password", size =(15, 1)), sg.InputText(key='-password-', size=15)],
              [sg.Button("Submit"), sg.Button("Cancel")]]
@@ -156,30 +156,28 @@ def dashboard():
     comm = 1
 
     # Defining layout
-    layout = [[sg.Text("PACEMAKER Device: " + device)],
-            [sg.Text("Device Communication"), commIndicator('-Main-')],
+    layout = [[sg.Text("DASHBOARD", font=("Courier New", 16), size =(10, 1))], [sg.Text("PACEMAKER Device: " + device)],
+            [sg.Text("Device Communication: "), commIndicator('-Main-')],
             [sg.Frame("Pacing Mode", [
-                [sg.Text(paramList[0], font=40, key='-MODE-'), sg.Button('Pace Now')]
+                [sg.Text(paramList[0], font=("Courier New", 16), key='-MODE-'), sg.Button('Pace Now')]
             ])], 
             [sg.Frame("Parameters", [
                 [sg.Text("Lower Rate Limit: ", size=25), sg.Text(str(paramList[1]), background_color='#68868c'), sg.Text("ppm")],
-                [sg.Text("Upper Rate Limit: ", size=25), sg.Text(str(paramList[2])), sg.Text("ppm")],
-                [sg.Text("Fixed AV Delay: ", size=25), sg.Text(str(paramList[3])), sg.Text("ms")],
-                [sg.Text("Reaction Time: ", size=25), sg.Text(str(paramList[4])), sg.Text("sec")],
-                [sg.Text("Response Factor: ", size=25), sg.Text(str(paramList[5])), sg.Text("")],
-                [sg.Text("Activity Threshold: ", size=25), sg.Text(str(paramList[6])), sg.Text("")],
-                [sg.Text("Recovery Time: ", size=25), sg.Text(str(paramList[7])), sg.Text("min")],
-                [sg.Text("Maximum Sensor Rate: ", size=25), sg.Text(str(paramList[8])), sg.Text("ppm")],
-                [sg.Text("Atrial Amplitude: ", size=25), sg.Text(str(paramList[9])), sg.Text("V")],
-                [sg.Text("Atrial Pulse Width: ", size=25), sg.Text(str(paramList[10])), sg.Text("ms")],
-                [sg.Text("ARP: ", size=25), sg.Text(str(paramList[11])), sg.Text("ms")],
-                [sg.Text("Atrial Threshold: ", size=25), sg.Text(str(paramList[12])), sg.Text("?")],
-                [sg.Text("Atrial Sensitivity: ", size=25), sg.Text(str(paramList[13])), sg.Text("V")],
-                [sg.Text("Ventricular Amplitude: ", size=25), sg.Text(str(paramList[4])), sg.Text("V")],
-                [sg.Text("Ventricular Pulse Width: ", size=25), sg.Text(str(paramList[5])), sg.Text("ms")],
-                [sg.Text("VRP: ", size=25), sg.Text(str(paramList[16])), sg.Text("ms")],
-                [sg.Text("Ventricular Threshold: ", size=25), sg.Text(str(paramList[17])), sg.Text("?")],
-                [sg.Text("Ventricular Sensitivity: ", size=25), sg.Text(str(paramList[18])), sg.Text("V")],
+                [sg.Text("Upper Rate Limit: ", size=25), sg.Text(str(paramList[2]), background_color='#68868c'), sg.Text("ppm")],
+                [sg.Text("Fixed AV Delay: ", size=25), sg.Text(str(paramList[3]), background_color='#68868c'), sg.Text("ms")],
+                [sg.Text("Reaction Time: ", size=25), sg.Text(str(paramList[4]), background_color='#68868c'), sg.Text("sec")],
+                [sg.Text("Response Factor: ", size=25), sg.Text(str(paramList[5]), background_color='#68868c'), sg.Text("")],
+                [sg.Text("Activity Threshold: ", size=25), sg.Text(str(paramList[6]), background_color='#68868c'), sg.Text("")],
+                [sg.Text("Recovery Time: ", size=25), sg.Text(str(paramList[7]), background_color='#68868c'), sg.Text("min")],
+                [sg.Text("Maximum Sensor Rate: ", size=25), sg.Text(str(paramList[8]), background_color='#68868c'), sg.Text("ppm")],
+                [sg.Text("Atrial Amplitude: ", size=25), sg.Text(str(paramList[9]), background_color='#68868c'), sg.Text("V")],
+                [sg.Text("Atrial Pulse Width: ", size=25), sg.Text(str(paramList[10]), background_color='#68868c'), sg.Text("ms")],
+                [sg.Text("ARP: ", size=25), sg.Text(str(paramList[11]), background_color='#68868c'), sg.Text("ms")],
+                [sg.Text("Atrial Sensitivity: ", size=25), sg.Text(str(paramList[12]), background_color='#68868c'), sg.Text("V")],
+                [sg.Text("Ventricular Amplitude: ", size=25), sg.Text(str(paramList[13]), background_color='#68868c'), sg.Text("V")],
+                [sg.Text("Ventricular Pulse Width: ", size=25), sg.Text(str(paramList[14]), background_color='#68868c'), sg.Text("ms")],
+                [sg.Text("VRP: ", size=25), sg.Text(str(paramList[15]), background_color='#68868c'), sg.Text("ms")],
+                [sg.Text("Ventricular Sensitivity: ", size=25), sg.Text(str(paramList[16]), background_color='#68868c'), sg.Text("V")],
                 [sg.Button('Edit Paramaters')],
             ])], 
             [sg.Button('Log Out')],
@@ -230,9 +228,12 @@ def editParam():
     sg.theme('DarkTeal11')
     
     paramList = parameters.readParam()
-    modeSelection = ["Off", "DDD", "VDD", "DDI", "DOO", "AOO", "AAI", "VOO", "VVI", "AAT", "VVT", "DDDR", "VDDR", "DDIR", "DOOR", "AOOR", "AAIR", "VOOR", "VVIR"]
+
+
+    modeSelection = ["AOO", "VOO", "AAI", "VVI", "DOO", "DOOR", "AOOR", "VOOR", "AAIR", "VVIR"]
+    # modeSelection = ["DDD", "DDI", "DOO", "AOO", "AAI", "VOO", "VVI", "AAT", "VVT", "DDDR", "VDDR", "DDIR", "DOOR", "AOOR", "AAIR", "VOOR", "VVIR"]
     actThresSelection = ["V-Low", "Low", "Med-Low", "Med", "Med-High", "High", "V-High"]
-    avUnregSelection = ["Off", "1.25", "2.5", "3.75", "5.0"]
+    avUnregSelection = ["0", "1.25", "2.5", "3.75", "5.0"]
 
     layout = [[sg.Text('Leave blank for no change. Put 0 for Off.')],
             [sg.Text("Pacing Mode", size=25), sg.Combo(modeSelection, key='-P0-')],
@@ -247,14 +248,12 @@ def editParam():
             [sg.Text("Atrial Amplitude", size=25), sg.Combo(avUnregSelection, key='-P9-', size=15)],
             [sg.Text("Atrial Pulse Width", size=25), sg.InputText(key='-P10-', size=15)],
             [sg.Text("ARP", size=25), sg.InputText(key='-P11-', size=15)],
-            [sg.Text("Atrial Threshold", size=25), sg.InputText(key='-P12-', size=15)],
-            [sg.Text("Atrial Sensitivity", size=25), sg.InputText(key='-P13-', size=15)],
-            [sg.Text("Ventricular Amplitude", size=25), sg.InputText(key='-P14-', size=15)],
-            [sg.Text("Ventricular Pulse Width", size=25), sg.InputText(key='-P15-', size=15)],
-            [sg.Text("VRP", size=25), sg.InputText(key='-P16-', size=15)],
-            [sg.Text("Ventricular Threshold", size=25), sg.InputText(key='-P17-', size=15)],
-            [sg.Text("Ventricular Sensitivity", size=25), sg.InputText(key='-P18-', size=15)],
-            [sg.Button("Submit"), sg.Button('Cancel')]]
+            [sg.Text("Atrial Sensitivity", size=25), sg.InputText(key='-P12-', size=15)],
+            [sg.Text("Ventricular Amplitude", size=25), sg.Combo(avUnregSelection, key='-P13-', size=15)],
+            [sg.Text("Ventricular Pulse Width", size=25), sg.InputText(key='-P14-', size=15)],
+            [sg.Text("VRP", size=25), sg.InputText(key='-P15-', size=15)],
+            [sg.Text("Ventricular Sensitivity", size=25), sg.InputText(key='-P16-', size=15)],
+            [sg.Button("Submit"), sg.Button('Set Nominal'), sg.Button('Cancel')]]
     
     window = sg.Window('Edit Parameters', layout, font=font)
  
@@ -282,7 +281,13 @@ def editParam():
                 break
             else:
                 sg.popup("Invalid Input")
-
+        
+        if event == 'Set Nominal':
+            paramInput = ['AOO', '60', '120', '150', '30', '8', 'Med', '5', '120', '3.75', '1', '250', '2.5', '3.75', '1', '320', '2.5']
+            parameters.writeParam(paramInput)
+            window.close()
+            dashboard()
+            break
 
     window.close()
 
