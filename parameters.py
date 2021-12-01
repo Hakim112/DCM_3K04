@@ -46,46 +46,167 @@ def validate(inputList):
     valids = ""
 
     # Parameter 0 : Mode 
+    valids += "1"
+
+    for i in range(len(inputList)):
+        value = inputList[i]
+
+        # Any blank value means no change, therefore input is valid
+        if  value == "":
+            valids += "1"
+
+        # All non-blank values need to be validated based on parameter
+        else:
+
+            # Parameter 1 : Lower Rate Limit 
+            if i == 1:
+                val = int(value) # ASSUMING VALUES ARE ALL INTS
+                if (30 <= val <= 50) & (val % 5 == 0):
+                    valids += "1"
+                elif (50 <= val <= 90):
+                    valids += "1"
+                elif (90 <= val <= 175) & (val % 5 == 0):
+                    valids += "1"
+                else:
+                    valids += "0"
+                
+            # Parameter 2 : Upper Rate Limit 
+            elif i == 2:
+                val = int(value)
+                if (50 <= val <= 175) & (val % 5 == 0):
+                    valids += "1"
+                else:
+                    valids += "0"
+            
+            # Parameter 3 : Fixed AV Delay
+            elif i == 3:
+                val = int(value)
+                if (70 <= val <= 300) & (val % 10 == 0):
+                    valids += "1"
+                else:
+                    valids += "0"
+
+            # Parameter 4 : Reaction Time
+            elif i == 4:
+                val = int(value)
+                if (10 <= val <= 50) & (val % 10 == 0):
+                    valids += "1"
+                else:
+                    valids += "0"
+            
+            # Parameter 5 : Response Factor
+            elif i == 5:
+                val = int(value)
+                if (1 <= val <= 16):
+                    valids += "1"
+                else:
+                    valids += "0"
+
+            # Parameter 6 : Activity Threshold
+            elif i == 6:
+                valids += "1"
+
+            # Parameter 7 : Recovery Time
+            elif i == 7:
+                val = int(value)
+                if (2 <= val <= 16):
+                    valids += "1"
+                else:
+                    valids += "0"
+
+            # Parameter 8 : Maximum Sensor Rate
+            elif i == 8:
+                val = int(value)
+                if (50 <= val <= 175) & (val % 5 == 0):
+                    valids += "1"
+                else:
+                    valids += "0"
 
 
 
-    # Parameter 1 : Lower Rate Limit 
+            # Parameter 9 : Atrial Amplitude     ASSUMING UNREG
+            elif i == 9:
+                valids += "1"
 
-    # Parameter 2 : Upper Rate Limit 
+            # Parameter 10 : Atrial Pulse Width 
+            elif i == 10:
+                val = int(value)
+                if (1 <= val <= 30) & (val % 1 == 0):
+                    valids += "1"
+                else:
+                    valids += "0"
 
-    # Parameter 3 : Fixed AV Delay
+                # val = float(value)
+                # if (val == 0.05):
+                #     valids += "1"
+                # elif (0.1 <= val <= 1.9) & (val % 0.1 == 0):
+                #     valids += "1"
+                # else:
+                #     valids += "0"
+            
+            # Parameter 11 : ARP 
+            elif i == 11:
+                val = int(value)
+                if (150 <= val <= 500) & (val % 10 == 0):
+                    valids += "1"
+                else:
+                    valids += "0"
 
-    # Parameter 4 : Reaction Time
+                # val = float(value)
+                # if (val == 0):
+                #     valids += "1"
+                # elif (0.5 <= val <= 3.2) & (val % 0.1 == 0):
+                #     valids += "1"
+                # elif (3.5 <= val <= 7.0) & (val % 0.5 == 0):
+                #     valids += "1"
+                # else:
+                #     valids += "0"
 
-    # Parameter 5 : Response Factor
+            # Parameter 12 : Atrial Threshold   IS THIS NEEDED??
+            elif i == 12:
+                valids += "1"
 
-    # Parameter 6 : Activity Threshold
+            # Parameter 13 : Atrial Sensitivity 
+            elif i == 13:
+                val = float(value)
+                if (0 <= val <= 5) & (val % 0.1 == 0):
+                    valids += "1"
+                else:
+                    valids += "0"
 
-    # Parameter 7 : Recovery Time
+            # Parameter 14 : Ventricular Amplitude 
+            elif i == 14:     # NEED CLEARIFICATION: REG OR UNREG?
+                valids += "1"
+            
+            # Parameter 15 : Ventricular Pulse Width
+            elif i == 15:
+                val = int(value)
+                if (1 <= val <= 30) & (val % 1 == 0):
+                    valids += "1"
+                else:
+                    valids += "0"
+            
+            # Parameter 16 : VRP
+            elif i == 16:
+                val = int(value)
+                if (150 <= val <= 500) & (val % 10 == 0):
+                    valids += "1"
+                else:
+                    valids += "0"
+            
+            # Parameter 17 : Ventricular Threshold  IS THIS NEEDED??
+            elif i == 17: 
+                valids += "1"
+            
+            # Parameter 18 : Ventricular Sensitivity 
+            elif i == 18:
+                val = float(value)
+                if (0 <= val <= 5) & (val % 0.1 == 0):
+                    valids += "1"
+                else:
+                    valids += "0"
 
-    # Parameter 8 : Maximum Sensor Rate 
-
-    # Parameter 9 : Atrial Amplitude 
-
-    # Parameter 10 : Atrial Pulse Width 
-
-    # Parameter 11 : ARP 
-
-    # Parameter 12 : Atrial Threshold 
-    
-    # Parameter 13 : Atrial Sensitivity 
-
-    # Parameter 14 : Ventricular Amplitude 
-
-    # Parameter 15 : Ventricular Pulse Width 
-
-    # Parameter 16 : VRP 
-
-    # Parameter 17 : Ventricular Threshold 
-    
-    # Parameter 18 : Ventricular Sensitivity 
-    
-    return 1
+    return valids
 
 
 
@@ -136,4 +257,27 @@ def sendParam(parmsList):
     ser.close()
 
 
+def validateSend(sentList):
 
+    # WHY ARE TOLERENCES IN MS??
+    
+    receivedList = receiveParam()
+
+    if(len(sentList) != len(receivedList)):
+        return 0
+
+    for i in range(len(sentList)):
+        if (sentList[i] != receivedList[i]):
+            return 0
+
+    return 1
+
+def receiveParam():
+
+    # NEED SIMULINK PEOPLE TO COME THROUGH 
+    # listR = readParam()
+    listR = ['DDD', '61', '120', '150', '30', '8', 'Med', '5', '120', '3.75', '1', '250', '!', '2.5', '3.75', '1', '320', '!', '2.5']
+    print(listR)
+
+
+    return listR

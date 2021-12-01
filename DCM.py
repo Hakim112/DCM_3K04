@@ -4,20 +4,12 @@ DEVICE CONTROL MONITOR (DCM)
 SFWRENG 3K04 
 
 TODO
-- Pacing Mode 
-- CommIndicator
-- Input Validation 
-- Add new parameters 
-
+- Input Validation (ALMOST DONE, NEED CLEARIFICATION ON TYPES)
+ 
 '''
-
-# Importing Libraries 
-import PySimpleGUI as sg  
-import serial 
-import struct
 
 # Importing Modules 
 import gui
 
-
 gui.welcome()
+# gui.dashboard()

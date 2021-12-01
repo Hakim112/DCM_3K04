@@ -8,7 +8,6 @@ Each function represents a state/window.
 
 # Importing libraries
 import PySimpleGUI as sg
-from python import commIndicator  
 import users
 import parameters
 
@@ -23,7 +22,7 @@ def welcome():
     sg.theme("Darkteal11")
 
     # Defining Layout
-    layout = [[sg.Text("WELCOME TO THE DCM", size=(20), font=("Courier New", 12))], 
+    layout = [[sg.Image("heart3.png")],[sg.Text("WELCOME TO THE DCM", size=(20), font=("Courier New", 12))], 
                 [sg.Button('Login')], 
                 [sg.Button('Register')], 
                 [sg.Button('Quit')],
@@ -153,40 +152,67 @@ def dashboard():
 
     # Updating variables
     paramList = parameters.readParam()
-    pacingModes = ["ASS"]
     device = "107380"
-    comm = 0
+    comm = 1
 
     # Defining layout
     layout = [[sg.Text("PACEMAKER Device: " + device)],
             [sg.Text("Device Communication"), commIndicator('-Main-')],
             [sg.Frame("Pacing Mode", [
-                [sg.Text(pacingModes[0], font=40, key='-MODE-')]
+                [sg.Text(paramList[0], font=40, key='-MODE-'), sg.Button('Pace Now')]
             ])], 
             [sg.Frame("Parameters", [
-                [sg.Text("Lower Rate Limit: " + str(paramList[0]))], 
-                [sg.Text("Upper Rate Limit: " + str(paramList[1]))],
-                [sg.Text("Atrial Amplitude: " + str(paramList[2]))],
-                [sg.Text("Atrial Pulse Width: " + str(paramList[3]))],
-                [sg.Text("Ventricular Amplitude: " + str(paramList[4]))],
-                [sg.Text("Ventricular Pulse Width: " + str(paramList[5]))],
-                [sg.Text("VRP: " + str(paramList[6]))],
-                [sg.Text("ARP: " + str(paramList[7]))],
+                [sg.Text("Lower Rate Limit: ", size=25), sg.Text(str(paramList[1]), background_color='#68868c'), sg.Text("ppm")],
+                [sg.Text("Upper Rate Limit: ", size=25), sg.Text(str(paramList[2])), sg.Text("ppm")],
+                [sg.Text("Fixed AV Delay: ", size=25), sg.Text(str(paramList[3])), sg.Text("ms")],
+                [sg.Text("Reaction Time: ", size=25), sg.Text(str(paramList[4])), sg.Text("sec")],
+                [sg.Text("Response Factor: ", size=25), sg.Text(str(paramList[5])), sg.Text("")],
+                [sg.Text("Activity Threshold: ", size=25), sg.Text(str(paramList[6])), sg.Text("")],
+                [sg.Text("Recovery Time: ", size=25), sg.Text(str(paramList[7])), sg.Text("min")],
+                [sg.Text("Maximum Sensor Rate: ", size=25), sg.Text(str(paramList[8])), sg.Text("ppm")],
+                [sg.Text("Atrial Amplitude: ", size=25), sg.Text(str(paramList[9])), sg.Text("V")],
+                [sg.Text("Atrial Pulse Width: ", size=25), sg.Text(str(paramList[10])), sg.Text("ms")],
+                [sg.Text("ARP: ", size=25), sg.Text(str(paramList[11])), sg.Text("ms")],
+                [sg.Text("Atrial Threshold: ", size=25), sg.Text(str(paramList[12])), sg.Text("?")],
+                [sg.Text("Atrial Sensitivity: ", size=25), sg.Text(str(paramList[13])), sg.Text("V")],
+                [sg.Text("Ventricular Amplitude: ", size=25), sg.Text(str(paramList[4])), sg.Text("V")],
+                [sg.Text("Ventricular Pulse Width: ", size=25), sg.Text(str(paramList[5])), sg.Text("ms")],
+                [sg.Text("VRP: ", size=25), sg.Text(str(paramList[16])), sg.Text("ms")],
+                [sg.Text("Ventricular Threshold: ", size=25), sg.Text(str(paramList[17])), sg.Text("?")],
+                [sg.Text("Ventricular Sensitivity: ", size=25), sg.Text(str(paramList[18])), sg.Text("V")],
+                [sg.Button('Edit Paramaters')],
             ])], 
-            [sg.Button('Edit Paramaters')],
+            [sg.Button('Log Out')],
             [sg.Button('Quit')]]
 
     window = sg.Window("Dashboard", layout, font=font)
     
-    # i = 0  # used for cycling through the pacing modes for demonstration 
     while True:
         event,values = window.read(timeout=400)
         
         if event == "Quit" or event == sg.WIN_CLOSED:
             break
+
+        if event == "Pace Now":
+
+            # parameters.sendParam(paramList) 
+
+            if(parameters.validateSend(paramList)):
+                comm = 1
+                sg.popup("Parameters sent successfully.")
+            else:
+                comm = 0
+                sg.popup("Unsuccesfull send. Try again.")
+            
+
         if event == "Edit Paramaters":
             window.close()
             editParam()
+            break
+
+        if event == "Log Out":
+            window.close()
+            welcome()
             break
     
         updateIndicator(window, '-Main-', 'red' if comm==0 else 'green') # On each loop the circle is updated
@@ -205,19 +231,30 @@ def editParam():
     
     paramList = parameters.readParam()
     modeSelection = ["Off", "DDD", "VDD", "DDI", "DOO", "AOO", "AAI", "VOO", "VVI", "AAT", "VVT", "DDDR", "VDDR", "DDIR", "DOOR", "AOOR", "AAIR", "VOOR", "VVIR"]
+    actThresSelection = ["V-Low", "Low", "Med-Low", "Med", "Med-High", "High", "V-High"]
+    avUnregSelection = ["Off", "1.25", "2.5", "3.75", "5.0"]
 
-    layout = [[sg.Text('Leave blank for no change.')],
-            [sg.Combo(modeSelection, key='-P0-')],
-            [sg.Text("Lower Rate Limit"), sg.InputText(key='-P0-', size=15)],
-            [sg.Text("Upper Rate Limit"), sg.InputText(key='-P1-', size=15)],
-            [sg.Text("Atrial Amplitude"), sg.InputText(key='-P2-', size=15)],
-            [sg.Text("Atrial Pulse Width"), sg.InputText(key='-P3-', size=15)],
-            [sg.Text("Ventricular Amplitude"), sg.InputText(key='-P4-', size=15)],
-            [sg.Text("Ventricular Pulse Width"), sg.InputText(key='-P5-', size=15)],
-            [sg.Text("VRP"), sg.InputText(key='-P6-', size=15)],
-            [sg.Text("ARP"), sg.InputText(key='-P7-', size=15)],
-            [sg.Button("Submit")],
-            [sg.Button('Cancel')]]
+    layout = [[sg.Text('Leave blank for no change. Put 0 for Off.')],
+            [sg.Text("Pacing Mode", size=25), sg.Combo(modeSelection, key='-P0-')],
+            [sg.Text("Lower Rate Limit", size=25), sg.InputText(key='-P1-', size=15)],
+            [sg.Text("Upper Rate Limit", size=25), sg.InputText(key='-P2-', size=15)],
+            [sg.Text("Fixed AV Delay", size=25), sg.InputText(key='-P3-', size=15)],
+            [sg.Text("Reaction Time", size=25), sg.InputText(key='-P4-', size=15)],
+            [sg.Text("Response Factor", size=25), sg.InputText(key='-P5-', size=15)],
+            [sg.Text("Activity Threshold", size=25), sg.Combo(actThresSelection, key='-P6-')],
+            [sg.Text("Recovery Time", size=25), sg.InputText(key='-P7-', size=15)],
+            [sg.Text("Maximum Sensor Rate", size=25), sg.InputText(key='-P8-', size=15)],
+            [sg.Text("Atrial Amplitude", size=25), sg.Combo(avUnregSelection, key='-P9-', size=15)],
+            [sg.Text("Atrial Pulse Width", size=25), sg.InputText(key='-P10-', size=15)],
+            [sg.Text("ARP", size=25), sg.InputText(key='-P11-', size=15)],
+            [sg.Text("Atrial Threshold", size=25), sg.InputText(key='-P12-', size=15)],
+            [sg.Text("Atrial Sensitivity", size=25), sg.InputText(key='-P13-', size=15)],
+            [sg.Text("Ventricular Amplitude", size=25), sg.InputText(key='-P14-', size=15)],
+            [sg.Text("Ventricular Pulse Width", size=25), sg.InputText(key='-P15-', size=15)],
+            [sg.Text("VRP", size=25), sg.InputText(key='-P16-', size=15)],
+            [sg.Text("Ventricular Threshold", size=25), sg.InputText(key='-P17-', size=15)],
+            [sg.Text("Ventricular Sensitivity", size=25), sg.InputText(key='-P18-', size=15)],
+            [sg.Button("Submit"), sg.Button('Cancel')]]
     
     window = sg.Window('Edit Parameters', layout, font=font)
  
@@ -237,7 +274,8 @@ def editParam():
             print(paramInput)
             
             # Input valid
-            if (parameters.validate(paramInput) == 1):
+            validation = parameters.validate(paramInput)
+            if ("0" not in validation):
                 parameters.writeParam(paramInput)
                 window.close()
                 dashboard()
